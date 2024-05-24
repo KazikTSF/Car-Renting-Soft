@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+order-service/mvnw
+order-service/mvnw.cmd
+car-service/mvnw.cmd
+car-service/mvnw
+car-service/.mvn/wrapper/maven-wrapper.properties
+order-service/.mvn/wrapper/maven-wrapper.properties
