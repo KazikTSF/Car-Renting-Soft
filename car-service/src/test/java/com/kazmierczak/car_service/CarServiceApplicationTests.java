@@ -2,55 +2,56 @@ package com.kazmierczak.car_service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kazmierczak.car_service.dto.CarRequest;
-import com.kazmierczak.car_service.dto.CarResponse;
 import com.kazmierczak.car_service.model.Car;
 import com.kazmierczak.car_service.repository.CarRepository;
 import com.kazmierczak.car_service.service.CarService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import com.mongodb.client.MongoClients;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.shaded.org.hamcrest.Matchers;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Testcontainers
 class CarServiceApplicationTests {
-
+	@Container
 	static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
-	static {
-		mongoDBContainer.start();
-	}
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
 	private ObjectMapper objectMapper;
 	@Autowired
 	private CarRepository carRepository;
-	@MockBean
-	CarService carService;
+	@Autowired
+	private CarService carService;
 	@DynamicPropertySource
 	static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
 		dynamicPropertyRegistry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
 	}
+	@AfterEach
+		public void cleanup() {
+		carRepository.deleteAll();
+	}
 	@Test
 	void shouldCreateCar() throws Exception {
-		String carRequestString = objectMapper.writeValueAsString(getCarRequest());
+		String carRequestString = objectMapper.writeValueAsString(getCarRequest1());
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/car")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(carRequestString))
@@ -64,19 +65,20 @@ class CarServiceApplicationTests {
 	}
 	@Test
 	void shouldShowAllCars() throws Exception {
-		CarResponse car1 = CarResponse.builder()
+		Car car1 = Car.builder()
 				.make("Toyota")
 				.model("Corolla")
 				.productionYear(2022)
 				.price(BigDecimal.valueOf(169))
 				.build();
-		CarResponse car2 = CarResponse.builder()
+		Car car2 = Car.builder()
 				.make("Toyota")
 				.model("Yaris")
 				.productionYear(2023)
 				.price(BigDecimal.valueOf(129))
 				.build();
-		Mockito.when(carService.getAllCars()).thenReturn(Arrays.asList(car1, car2));
+		carRepository.save(car1);
+		carRepository.save(car2);
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/car"))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -90,8 +92,7 @@ class CarServiceApplicationTests {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].productionYear").value(2023))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].price").value(BigDecimal.valueOf(129)));
 	}
-
-	private CarRequest getCarRequest() {
+	private CarRequest getCarRequest1() {
 		return CarRequest.builder()
 				.make("Toyota")
 				.model("Corolla")
@@ -99,5 +100,12 @@ class CarServiceApplicationTests {
 				.price(BigDecimal.valueOf(169))
 				.build();
 	}
-
+	private CarRequest getCarRequest2() {
+		return CarRequest.builder()
+				.make("Toyota")
+				.model("Yaris")
+				.productionYear(2023)
+				.price(BigDecimal.valueOf(129))
+				.build();
+	}
 }

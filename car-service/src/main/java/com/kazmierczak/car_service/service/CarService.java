@@ -24,7 +24,7 @@ public class CarService {
                 .price(carRequest.getPrice())
                 .build();
         carRepository.save(car);
-        log.info("Car {} is saved", car.getId());
+        log.info("Car {} is saved", car.getCarId());
     }
 
     public List<CarResponse> getAllCars() {
@@ -34,7 +34,7 @@ public class CarService {
 
     private CarResponse mapToCarResponse(Car car) {
         return CarResponse.builder()
-                .id(car.getId())
+                .carId(car.getCarId())
                 .make(car.getMake())
                 .model(car.getModel())
                 .productionYear(car.getProductionYear())
