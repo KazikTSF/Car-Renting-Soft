@@ -54,7 +54,8 @@ class InventoryServiceApplicationTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/inventory/Corolla2022"))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.jsonPath("$").value(true));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.inStock").value(true))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.skuCode").value("Corolla2022"));
 	}
 	@Test
 	void isNotInStock() throws Exception {
@@ -66,6 +67,18 @@ class InventoryServiceApplicationTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/inventory/Corolla2022"))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.jsonPath("$").value(false));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.inStock").value(false));
+	}
+	@Test
+	void quantityIsZero() throws Exception {
+		Inventory inv = Inventory.builder()
+				.skuCode("Corolla2022")
+				.quantity(0)
+				.build();
+		inventoryRepository.save(inv);
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/inventory/Corolla2022"))
+				.andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.inStock").value(false));
 	}
 }

@@ -21,4 +21,5 @@ public class OrderCar {
     private String skuCode;
     private BigDecimal price;
     private Integer numberOfDays;
+    private Integer quantity;
 }

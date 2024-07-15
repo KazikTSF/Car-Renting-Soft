@@ -5,9 +5,7 @@ import com.kazmierczak.car_service.dto.CarRequest;
 import com.kazmierczak.car_service.model.Car;
 import com.kazmierczak.car_service.repository.CarRepository;
 import com.kazmierczak.car_service.service.CarService;
-import com.mongodb.client.MongoClients;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +15,11 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +47,7 @@ class CarServiceApplicationTests {
 	}
 	@Test
 	void shouldCreateCar() throws Exception {
-		String carRequestString = objectMapper.writeValueAsString(getCarRequest1());
+		String carRequestString = objectMapper.writeValueAsString(getCarRequest());
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/car")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(carRequestString))
@@ -92,20 +88,12 @@ class CarServiceApplicationTests {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].productionYear").value(2023))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].price").value(BigDecimal.valueOf(129)));
 	}
-	private CarRequest getCarRequest1() {
+	private CarRequest getCarRequest() {
 		return CarRequest.builder()
 				.make("Toyota")
 				.model("Corolla")
 				.productionYear(2022)
 				.price(BigDecimal.valueOf(169))
-				.build();
-	}
-	private CarRequest getCarRequest2() {
-		return CarRequest.builder()
-				.make("Toyota")
-				.model("Yaris")
-				.productionYear(2023)
-				.price(BigDecimal.valueOf(129))
 				.build();
 	}
 }
