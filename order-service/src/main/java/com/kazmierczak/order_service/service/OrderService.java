@@ -27,10 +27,11 @@ public class OrderService {
         order.setOrderCar(orderCar);
 
         InventoryResponse result = webClientBuilder.build().get()
-                .uri("http://inventory-service/api/inventory/" + orderCar.getSkuCode())
+                .uri("http://localhost:8082/api/inventory/" + orderCar.getSkuCode())
                 .retrieve()
                 .bodyToMono(InventoryResponse.class)
                 .block();
+
         if(result.isInStock()) {
             orderRepository.save(order);
         }

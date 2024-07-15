@@ -51,8 +51,8 @@ class OrderServiceApplicationTests {
 		dynamicPropertyRegistry.add("spring.datasource.url", mysql::getJdbcUrl);
 		dynamicPropertyRegistry.add("spring.datasource.username", mysql::getUsername);
 		dynamicPropertyRegistry.add("spring.datasource.password", mysql::getPassword);
-
 	}
+
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(8082));
 	private final WireMockServer wm = new WireMockServer(8082);
