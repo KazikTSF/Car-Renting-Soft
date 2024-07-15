@@ -7,10 +7,8 @@ import com.kazmierczak.order_service.model.Order;
 import com.kazmierczak.order_service.model.OrderCar;
 import com.kazmierczak.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.UUID;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @Transactional
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
@@ -28,8 +26,8 @@ public class OrderService {
         OrderCar orderCar = mapToDto(orderRequest.getOrderCarDto());
         order.setOrderCar(orderCar);
 
-        InventoryResponse result = webClient.get()
-                .uri("http://localhost:8082/api/inventory/" + orderCar.getSkuCode())
+        InventoryResponse result = webClientBuilder.build().get()
+                .uri("http://inventory-service/api/inventory/" + orderCar.getSkuCode())
                 .retrieve()
                 .bodyToMono(InventoryResponse.class)
                 .block();
