@@ -10,20 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f7bba57-cf93-4700-aae3-288d6033fffb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Car_Renting_Soft_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/kazmierczak/notification_service/NotificationServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/kazmierczak/notification_service/event/OrderPlacedEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/com/kazmierczak/order_service/event/OrderPlacedEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/kazmierczak/order_service/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/kazmierczak/order_service/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +51,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "jdk.selected.JAVA_MODULE": "21",
-    "last_opened_file_path": "C:/Projekty/Car-Renting-Soft/notification-service/src/main/java",
+    "last_opened_file_path": "C:/Projekty/Car-Renting-Soft/notification-service/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,6 +68,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projekty\Car-Renting-Soft\notification-service\src\main\resources" />
+      <recent name="C:\Projekty\Car-Renting-Soft\car-service\src\main\resources" />
+      <recent name="C:\Projekty\Car-Renting-Soft\order-service\src\main\resources" />
+      <recent name="C:\Projekty\Car-Renting-Soft\inventory-service\src\main\resources" />
       <recent name="C:\Projekty\Car-Renting-Soft\notification-service\src\main\java" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -89,9 +80,10 @@
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="mvn compile" />
       <command value="mvn dependency:analyze" />
       <command value="mvn clean" />
+      <command value="mvn compile" />
+      <command value="mvn clean compile jib:build" />
     </option>
   </component>
   <component name="RunDashboard">
@@ -232,7 +224,8 @@
       <option name="presentableId" value="Default" />
       <updated>1720993177429</updated>
       <workItem from="1720993179375" duration="17681000" />
-      <workItem from="1721066624040" duration="18464000" />
+      <workItem from="1721066624040" duration="20421000" />
+      <workItem from="1721127631616" duration="6476000" />
     </task>
     <servers />
   </component>

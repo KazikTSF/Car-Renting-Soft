@@ -70,7 +70,7 @@
                 <version>3.4.3</version>
                 <configuration>
                     <from>
-                        <image>eclipse:temurin:21-jre</image>
+                        <image>eclipse-temurin:21-jre</image>
                     </from>
                     <to><image>registry.hub.docker.com/kaziktsf/${project.artifactId}</image></to>
                 </configuration>
