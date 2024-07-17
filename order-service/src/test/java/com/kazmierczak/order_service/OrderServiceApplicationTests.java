@@ -7,6 +7,7 @@ import com.kazmierczak.order_service.dto.OrderCarDto;
 import com.kazmierczak.order_service.dto.OrderRequest;
 import com.kazmierczak.order_service.model.Order;
 import com.kazmierczak.order_service.repository.OrderRepository;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MySQLContainer;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -28,10 +32,10 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@SpringBootTest
+@SpringBootTest(properties = {"spring.cloud.discovery.client.simple.instances.inventory-service[0].uri=http://localhost:8082"})
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
+@EmbeddedKafka
 class OrderServiceApplicationTests {
 	static MySQLContainer mysql = new MySQLContainer("mysql:latest")
 			.withDatabaseName("order-service")
@@ -56,7 +60,6 @@ class OrderServiceApplicationTests {
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(8082));
 	private final WireMockServer wm = new WireMockServer(8082);
-
 	@BeforeEach
 	void setUp() {
 		wm.start();
@@ -68,7 +71,7 @@ class OrderServiceApplicationTests {
 	}
 	@Test
 	void shouldPlaceOrder() throws Exception {
-		wm.stubFor(get(urlPathMatching("/api/inventory/Corolla2022"))
+		wm.stubFor(get(urlEqualTo("/api/inventory/Corolla2022"))
 				.willReturn(aResponse()
 						.withStatus(200)
 						.withHeader("Content-Type", "application/json")
@@ -100,6 +103,7 @@ class OrderServiceApplicationTests {
 				.content(orderRequestString))).hasMessageContaining("java.lang.IllegalArgumentException: Product not in stock");
 
 	}
+
 	private OrderRequest getCreatedOrder() {
 		OrderCarDto orderCarDto = OrderCarDto.builder()
 				.id(1L)
