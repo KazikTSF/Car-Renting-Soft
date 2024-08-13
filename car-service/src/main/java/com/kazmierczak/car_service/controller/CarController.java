@@ -15,11 +15,13 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@RequestBody CarRequest carRequest) {
         carService.createCar(carRequest);
     }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CarResponse> getAllCars() {

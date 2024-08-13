@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.math.BigInteger;
 
-public interface CarRepository extends MongoRepository<Car, BigInteger> {}
+public interface CarRepository extends MongoRepository<Car, BigInteger> {
+}

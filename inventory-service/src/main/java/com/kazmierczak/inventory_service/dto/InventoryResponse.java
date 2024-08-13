@@ -1,15 +1,7 @@
 package com.kazmierczak.inventory_service.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class InventoryResponse {
-    private String SkuCode;
-    private boolean isInStock;
+public record InventoryResponse(String skuCode, boolean isInStock) {
 }

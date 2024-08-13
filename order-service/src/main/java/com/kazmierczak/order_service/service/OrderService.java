@@ -22,23 +22,21 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+
     public void placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
-        OrderCar orderCar = mapToDto(orderRequest.getOrderCarDto());
+        OrderCar orderCar = mapToDto(orderRequest.orderCarDto());
         order.setOrderCar(orderCar);
-
         InventoryResponse result = webClientBuilder.build().get()
                 .uri("http://inventory-service/api/inventory/" + orderCar.getSkuCode())
                 .retrieve()
                 .bodyToMono(InventoryResponse.class)
                 .block();
-
-        if(result.isInStock()) {
+        if (result.isInStock()) {
             orderRepository.save(order);
             kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
-        }
-        else
+        } else
             throw new IllegalArgumentException("Product not in stock");
     }
 
