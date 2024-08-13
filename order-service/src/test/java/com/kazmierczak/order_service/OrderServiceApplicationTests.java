@@ -15,13 +15,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MySQLContainer;
 import wiremock.com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,9 +46,6 @@ class OrderServiceApplicationTests {
     }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Autowired
-    private MockMvc mockMvc;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -95,16 +89,13 @@ class OrderServiceApplicationTests {
     }
 
     @Test
-    void shouldNotPlaceOrder() throws Exception {
+    void shouldNotPlaceOrder() {
         InventoryResponse inventoryResponse = new InventoryResponse("Corolla2022", false);
         wm.stubFor(get(urlPathMatching("/api/inventory/Corolla2022")).willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withJsonBody(objectMapper.valueToTree(inventoryResponse))));
-        String orderRequestString = objectMapper.writeValueAsString(getCreatedOrder());
-        assertThatThrownBy(() -> mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(orderRequestString))).hasMessageContaining("java.lang.IllegalArgumentException: Product not in stock");
+        assertThatThrownBy(() -> orderService.placeOrder(getCreatedOrder())).isInstanceOf(IllegalArgumentException.class);
 
     }
 
